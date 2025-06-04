@@ -1,0 +1,113 @@
+appId: com.sixamtech.hexaride
+---
+- launchApp:
+    appId: "com.sixamtech.hexaride"
+    clearState: true
+    clearKeychain: true
+    stopApp: false
+    permissions:
+      all: "deny"
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_deny_button"
+- tapOn: "Skip"
+- "hideKeyboard"
+- tapOn: "Sign up"
+- "hideKeyboard"
+- "scroll"
+- inputText: "FLINT"
+- tapOn: "Last Name"
+- inputText: "LAB"
+- tapOn: "+1\nPhone"
+- inputText: "416555"
+- inputRandomNumber:
+    length: 4
+- tapOn: "Enter Password"
+- inputText: "flintlab"
+- tapOn: "Enter Confirm Password"
+- inputText: "flintlab"
+- "hideKeyboard"
+- tapOn: "Submit"
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_allow_foreground_only_button"
+- tapOn: "Use current location"
+- tapOn: "Where to go?"
+- tapOn: "Destination"
+- inputText: "RK baech"
+- tapOn: "R K Beach, Visakhapatnam, Andhra Pradesh"
+- "hideKeyboard"
+- tapOn: "Proceed to Next"
+- swipe:
+    from:
+      text: "Car"
+    direction: "UP"
+- tapOn: "Cash"
+- tapOn: "Digital Pay"
+- tapOn: "Add Note"
+- inputText: "Come Fast"
+- tapOn: "Find Rider"
+- tapOn: "Insight"
+- "scroll"
+- "scroll"
+- "scroll"
+- "back"
+- "back"
+- tapOn: "Add Address\nSave your address for quick trip"
+- tapOn: "Pick Location"
+- inputText: "Rk beach"
+- tapOn: "R K Beach, Visakhapatnam, Andhra Pradesh"
+- tapOn: "Street"
+- inputText: "RK beach street"
+- "hideKeyboard"
+- tapOn: "Office"
+- tapOn: "Others"
+- tapOn: "Address Level Name"
+- inputText: "A-hub"
+- "hideKeyboard"
+- "scroll"
+- tapOn: "Save Address"
+- tapOn: "Parcel"
+- tapOn: "Documents"
+- tapOn: "Send\nSafest delivery"
+- swipe:
+    from:
+      text: "Sender info\nTab 1 of 2"
+    direction: "UP"
+- tapOn: "Location"
+- tapOn: "Pick Location"
+- tapOn: "Receiver info\nTab 2 of 2"
+- tapOn: "+1\nContact number"
+- inputText: "416555"
+- inputRandomNumber:
+    length: 4
+- "hideKeyboard"
+- tapOn: "Name"
+- inputText: "FlINT LAB"
+- tapOn: "Location"
+- tapOn: "Pick Location"
+- tapOn: "Next"
+- tapOn: "0.5 kg"
+- inputText: "30"
+- tapOn: "Save Details"
+- swipe:
+    from:
+      text: "Sender pay"
+    direction: "UP"
+- tapOn: "Digital Pay"
+- tapOn: "Cash"
+- tapOn: "Find Deliveryman"
+- tapOn: "Choose the efficient Vehicles"
+- "back"
+- "scroll"
+- tapOn: "See All"
+- tapOn: "35% Discount on Parcel\nGet 35% Discount on your Parcel delivery\nValid:\
+    \ 24 Jul 2026\nAll"
+- tapOn: "Got it"
+- tapOn: "Ride share with 50% discount\nGet 50% discount on your Ride\nValid: 16 Oct\
+    \ 2026\nAll"
+- tapOn: "Got it"
+- tapOn: "Coupons"
+- tapOn: "Apply"
+- tapOn: "Apply"
+- "back"
+- "back"
+- "scroll"

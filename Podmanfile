@@ -1,0 +1,79 @@
+FROM python:3.10-alpine
+
+# Set environment variables
+ENV ANDROID_HOME=/opt/android-sdk
+ENV PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
+
+# Install dependencies
+RUN apk add --no-cache \
+    bash \
+    curl \
+    wget \
+    unzip \
+    git \
+    nano \
+    iputils \
+    net-tools \
+    lsof \
+    sudo \
+    shadow \
+    openjdk17-jdk \
+    libstdc++ \
+    libc6-compat \
+    && rm -rf /var/cache/apk/*
+
+# Install Android SDK Command Line Tools and ADB
+RUN mkdir -p "$ANDROID_HOME/cmdline-tools" && \
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip && \
+    unzip cmdline-tools.zip -d "$ANDROID_HOME/cmdline-tools" && \
+    mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest" && \
+    rm cmdline-tools.zip && \
+    yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=${ANDROID_HOME} "platform-tools"
+
+# Install GoTTY
+RUN wget -q https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz && \
+    tar -xzf gotty_linux_amd64.tar.gz && \
+    mv gotty /usr/local/bin/ && \
+    rm gotty_linux_amd64.tar.gz
+
+# Create non-root user with sudo privileges
+RUN useradd -m appuser && echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Create .android directory and copy adb keys BEFORE switching user
+# Note: adbkey and adbkey.pub must be in the same folder as this Podmanfile
+COPY adbkey /tmp/adbkey
+COPY adbkey.pub /tmp/adbkey.pub
+
+RUN mkdir -p /home/appuser/.android && \
+    mv /tmp/adbkey /home/appuser/.android/adbkey && \
+    mv /tmp/adbkey.pub /home/appuser/.android/adbkey.pub && \
+    chmod 600 /home/appuser/.android/adbkey && \
+    chmod 644 /home/appuser/.android/adbkey.pub && \
+    chown -R appuser:appuser /home/appuser/.android
+
+WORKDIR /home/appuser/app
+
+# Copy YAML and script files before switching user
+COPY RideShare.yaml /home/appuser/app/RideShare.yaml
+COPY start.sh /home/appuser/app/start.sh
+
+# Create reports directory and fix ownership and permissions BEFORE switching user
+RUN chown -R appuser:appuser /home/appuser/app && \
+    chmod -R 755 /home/appuser/app
+
+# Set script permission while still root
+RUN chmod +x /home/appuser/app/start.sh
+
+# Switch to non-root user
+USER appuser
+
+# Install Maestro CLI (as appuser)
+RUN curl -Ls "https://get.maestro.mobile.dev" | bash
+RUN echo "alias Maestro='maestro test --format HTML'" >> /home/appuser/.bashrc
+
+# Expose GoTTY port
+EXPOSE 8080
+
+# Default command to run the test
+CMD ["/bin/bash", "/home/appuser/app/start.sh"]
+
